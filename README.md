@@ -99,8 +99,8 @@ Repeating the same request multiple times produces the same server state as doin
 
 *Example:* For a `GetCustomerDetails` operation, WSDL specifies the request format, response format, and endpoint URL.
 
-## Advantages / Limitations
-(Note: source lists the same points under both advantages and limitations)
+## Limitations
+
 - Large XML messages → higher bandwidth usage.
 - More complex to develop/maintain than REST.
 - XML parsing increases processing time, can reduce performance.
