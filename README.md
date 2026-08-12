@@ -231,3 +231,72 @@ type Mutation {
 | No versioning typically needed | Often versioned (v1, v2...) |
 | Strongly typed schema | No strict schema enforcement |
 | Best for complex, modern data needs | Large, mature ecosystem |
+
+
+
+
+
+
+
+# gRPC — Short Notes
+
+## What is gRPC?
+- **gRPC (gRPC Remote Procedure Calls)** — open-source RPC framework created by **Google**.
+- Enables communication across distributed systems by letting clients call methods on a remote server as if they were local.
+- Uses **Protocol Buffers (protobuf)** for serialization instead of JSON.
+- Uses **HTTP/2** as transport protocol instead of HTTP/1.1.
+
+**Key elements:**
+- Supports Remote Procedure Calls (RPC) — execute functions on distant servers.
+- Protocol Buffers — language-agnostic, binary serialization format defining data structure & service methods.
+- HTTP/2 — provides multiplexing, flow management, efficient binary data transfer.
+- Multi-language support — services in different languages can interoperate.
+
+## Why gRPC is Popular
+
+### 1. Performance
+- HTTP/2 multiplexing sends multiple requests/responses over a single TCP connection → lower latency.
+- Protocol Buffers are faster to parse and more compact than text-based JSON/XML.
+
+### 2. Language Support
+- First-class support for Java, C++, Python, Go, Ruby, Node.js, C#, and more.
+- Enables polyglot environments — services in different languages can talk to each other.
+
+### 3. Streaming
+Four communication patterns:
+- **Unary** – one request, one response.
+- **Client Streaming** – client sends a stream of requests, gets one response.
+- **Server Streaming** – client sends one request, gets a stream of responses.
+- **Bidirectional Streaming** – both client and server send messages to each other.
+
+### 4. Interoperability
+- Protocol Buffers act as the **Interface Definition Language (IDL)**.
+- Services/messages defined in `.proto` files → gRPC generates client & server code in multiple languages.
+
+## gRPC Architecture
+- **`.proto` files** – define service methods, request/response message types.
+- **Generated code** – gRPC tools create client/server stubs & skeletons from `.proto` files.
+- **Server implementation** – developers extend generated server classes to implement RPC logic.
+- **Client Stub** – generated client code lets clients call remote methods like local ones.
+- **Transport Layer** – uses HTTP/2 for message transport between client and server.
+
+## Why gRPC is So Performant
+
+| Feature | Benefit |
+|---|---|
+| **HTTP/2 Multiplexing** | Multiple requests/responses over one TCP connection → lower latency |
+| **Header Compression** | Reduces total data transmitted |
+| **Binary Framing** | More efficient than HTTP/1.1's text-based framing |
+| **Binary Serialization (Protobuf)** | Faster parsing, smaller message size vs JSON/XML |
+| **Compression (gzip, etc.)** | Cuts payload size, saves bandwidth |
+| **Streaming** | Efficient handling of large data sets & real-time communication |
+
+## Features of gRPC
+- **Cross-Language Support** – ideal for polyglot environments.
+- **Load Balancing** – built-in client-side load balancing across server instances.
+- **Pluggable Authentication** – supports SSL/TLS, OAuth, custom auth mechanisms.
+- **Error Handling** – standard status codes + detailed error messages for easier debugging.
+- **Retries and Timeouts** – configurable automatic retries and timeouts improve fault tolerance.
+
+## Conclusion
+gRPC + Protocol Buffers together enable scalable, interoperable, and efficient distributed systems — especially valuable in **microservices architectures** where reliable, high-performance communication is essential.
