@@ -123,3 +123,111 @@ Repeating the same request multiple times produces the same server state as doin
 | Messaging | Supports transactions, reliable messaging | Lightweight and faster |
 | Complexity | More complex, verbose | Simpler, easier to implement |
 | Best For | Enterprise systems | Web and mobile applications |
+
+
+# GraphQL — Short Notes
+
+## What is GraphQL?
+- Open-source **query language for APIs** + server-side runtime for executing queries.
+- Allows clients to request exactly the data they need in a **single query**.
+- Server processes queries and returns only the requested data.
+- Unlike REST (multiple endpoints), GraphQL retrieves specific data through one endpoint/query.
+- Developed by **Facebook**, later open-sourced.
+
+**Example:** Fetching a blog post + author info.
+- REST → 2 separate requests (post, author).
+- GraphQL → 1 query returns both, reducing network overhead.
+
+```graphql
+query {
+  post(id: "1") {
+    title
+    content
+    author {
+      name
+      email
+    }
+  }
+}
+```
+Server returns post details and author info together in one JSON response.
+
+## Core Components
+
+### 1. Schema
+- Defines data types and their relationships.
+- Written in **SDL** (Schema Definition Language) — human-readable, language-agnostic.
+- Two main operation types: **Queries** (read) and **Mutations** (write).
+
+### 2. Types
+- **Scalar Types** – integers, strings, booleans, floats.
+- **Object Types** – complex objects with fields (e.g., a `User` type with `id`, `name`, `email`).
+
+### 3. Queries
+- Used to **retrieve** data; client specifies exact fields needed.
+- Similar to REST's GET, but avoids over-fetching/under-fetching.
+
+### 4. Mutations
+- Used to **modify** data (create, update, delete).
+- Similar to REST's POST/PUT/DELETE.
+
+## Basic Schema Design Example
+
+```graphql
+type Book {
+  id: ID!
+  title: String!
+  author: String!
+}
+
+type Query {
+  books: [Book!]!
+  book(id: ID!): Book
+}
+
+type Mutation {
+  createBook(title: String!, author: String!): Book
+  updateBook(id: ID!, title: String, author: String): Book
+  deleteBook(id: ID!): Boolean
+}
+```
+- `!` = non-nullable field.
+- `Query.books` → returns non-null list of non-null `Book` objects.
+- `Query.book(id)` → returns a single `Book`.
+- `Mutation` → `createBook`, `updateBook`, `deleteBook` operations.
+
+## Working of GraphQL
+1. **Client Sends Query** – specifies exact data needed.
+2. **Query Validation** – server validates against the schema.
+3. **Resolver Execution** – resolvers fetch data from DB/APIs/services.
+4. **Data Processing** – server organizes fetched data per query structure.
+5. **Response Sent** – JSON response with only requested data.
+
+## Features
+- Flexible queries (no over/under-fetching)
+- Strongly typed schema (fewer runtime errors)
+- Real-time updates via **subscriptions**
+- Single endpoint for all operations
+- **Introspection** – clients can explore schema capabilities
+- Batching – multiple queries in one request
+- Efficient for mobile (less data transfer)
+- No versioning needed
+
+## Advantages
+- Efficient data fetching (only required fields)
+- Single endpoint simplifies API management
+- Strongly typed schema improves reliability
+- Fewer network requests (related data in one query)
+- Better DX — tools like GraphQL Playground, introspection
+
+## GraphQL vs REST API
+
+| GraphQL | REST API |
+|---------|----------|
+| Single endpoint for all operations | Multiple endpoints per resource |
+| Client specifies exact data needed | Server defines response structure |
+| Reduces over/under-fetching | May cause over/under-fetching |
+| Real-time via subscriptions | Polling or WebSockets |
+| No versioning typically needed | Often versioned (v1, v2...) |
+| Strongly typed schema | No strict schema enforcement |
+| Best for complex, modern data needs | Large, mature ecosystem |
