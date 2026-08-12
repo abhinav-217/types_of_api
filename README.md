@@ -300,3 +300,63 @@ Four communication patterns:
 
 ## Conclusion
 gRPC + Protocol Buffers together enable scalable, interoperable, and efficient distributed systems — especially valuable in **microservices architectures** where reliable, high-performance communication is essential.
+
+
+
+
+# WebSocket API — Short Notes
+
+## What is an API?
+- **API (Application Programming Interface)** – predefined set of instructions describing how applications communicate with each other.
+- Acts as a middleman for transferring data between a web server and an application.
+- Lets apps expose their functionality/data to external parties.
+- Examples: Google Maps API, Twitter API.
+
+## What is WebSocket?
+- A **communication protocol** mainly used between a client and server.
+
+**Features:**
+- **Full-Duplex Protocol** – app can send and receive data simultaneously.
+- **Stateful Protocol** – connection stays open until explicitly closed by client or server; closing from one end closes it on the other.
+- **3-Way Handshake** – uses a TCP connection to establish communication.
+
+## What is WebSocket API?
+- A **JavaScript API** that allows creation of web sockets.
+- Enables full-duplex communication using a TCP connection.
+- Uses **port 80** by default.
+
+**Features:**
+- Bidirectional – data flows both ways (client ↔ server).
+- Full-duplex communication model.
+- Single TCP connection used throughout.
+- Mainly used in real-time apps (chat, video calls).
+- Enables fast data transmission.
+- Scaling possible, but only **vertically**.
+
+## Uses of WebSocket API
+
+| Domain | Use Case |
+|---|---|
+| **Online Education** | Real-time video streaming, screen sharing |
+| **Gaming** | Real-time multiplayer games with chat/call features |
+| **Collaborative Apps** | Concurrent workspace editing (e.g., Google Docs) |
+| **Real-time Data Visualization** | Easier live visualization of streaming data |
+| **Event Update Apps** | Real-time updates pushed to a common platform |
+| **Tracking User Behaviour** | Real-time interaction tracking for better recommendations |
+
+## WebSocket Implementation (Python — FastAPI)
+
+```python
+from fastapi import FastAPI, WebSocket
+
+app = FastAPI()
+
+@app.websocket("/ws")
+async def websocket_endpoint(webs: WebSocket):
+    await webs.accept()
+    while True:
+        raw_text = await webs.receive_text()
+        await webs.send_text(f'received data {raw_text}')
+
+# To test: ws://localhost:8000/ws (e.g., in Postman)
+```
