@@ -1,4 +1,4 @@
-# REST API
+# REST API ( Representational State Transfer Application )
 ## What is a REST API?
 - Enables client-server communication over HTTP.
 - Exchanges data typically in **JSON** format.
