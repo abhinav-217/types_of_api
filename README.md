@@ -72,6 +72,87 @@ Grouped into 5 classes:
 - **How does HTTP relate to DDoS?** High volumes of HTTP requests can flood a server — known as an HTTP flood, a Layer 7 (application layer) DDoS attack.
 
 
+# DNS — Compact Revision Notes
+
+## 1. What is DNS?
+- **DNS (Domain Name System)** = "phone book of the internet."
+- Maps human-friendly **domain names** (e.g., `www.example.com`) → **IP addresses** (e.g., `192.0.2.1`).
+- Lets us type names instead of memorizing numeric addresses.
+
+## 2. How DNS Resolution Works (Overall Flow)
+- Your computer checks **local cache** first.
+- If not found → sends query to a **DNS resolver**.
+- Resolver checks its own cache → if not found, queries the next server in the chain.
+- This continues (resolver → root → TLD → authoritative) until the IP is found or the query times out.
+- A **DNS resolver** = server that stores DNS records and answers DNS queries.
+
+## 3. The 5-Step Lookup Journey (for `www.example.com`)
+```
+Local Cache → Recursive DNS Server → Root DNS Server → TLD DNS Server → Authoritative DNS Server
+```
+
+### Step 1: Local Caches
+Checked first, in order of convenience — no network trip needed if found here:
+- **Browser Cache** — site visited before, browser remembers IP.
+- **DNS Cache** — OS-level cache based on record's **TTL (Time To Live)**.
+- **Hosts File** — manually configured domain→IP mappings on the machine.
+
+### Step 2: Recursive DNS Server
+- The server your device/router is configured to use (often your **ISP's DNS server**).
+- Checks its own cache; if empty, forwards the query onward (to root servers) **on your behalf**.
+
+### Step 3: Root DNS Servers
+- Top of the DNS hierarchy.
+- Don't know website IPs directly — they know **which servers handle each TLD** (`.com`, `.org`, `.net`, etc.) and point the resolver there.
+- Check via: `dig +short NS com`
+
+### Step 4: Top-Level Domain (TLD) DNS Servers
+- Handle a specific TLD (e.g., `.com`).
+- Don't have website IPs either — point to the **authoritative DNS server** for the specific second-level domain (e.g., `example.com`).
+- Check via: `dig +short NS example.com`
+
+### Step 5: Authoritative DNS Servers
+- The **actual source of truth** — stores the real DNS records for the domain.
+- Returns the **A record** (maps domain → IP address) to the recursive resolver.
+- Recursive resolver relays this IP back to your computer.
+
+## 4. `dig` — Command-Line DNS Tool
+- Used to query DNS servers directly and debug DNS issues.
+- Install on Windows: `choco install dig` (native on Linux/macOS).
+
+| Command | Purpose |
+|---|---|
+| `dig +short www.example.com` | Get just the resolved IP address |
+| `dig +trace www.example.com` | Show the full resolution path (root → TLD → authoritative) |
+| `dig example.com A` | Get all **A records** (domain → IPv4) |
+| `dig example.com MX` | Get all **MX records** (mail servers) |
+| `dig example.com MX +trace` | Check if MX record changes have **propagated** across DNS servers |
+| `dig example.com +dnssec` | Check **DNSSEC** validation/records |
+| `dig example.com A @8.8.8.8` | Query a **specific DNS server** (here, Google's `8.8.8.8`) instead of the default one |
+
+- **DNSSEC** = security extension for DNS; authenticates the source of DNS data and its integrity, preventing tampering in transit.
+
+## 5. Common DNS Errors
+| Error | Meaning |
+|---|---|
+| `DNS_PROBE_FINISHED_NXDOMAIN` | Domain **doesn't exist** (mistyped or expired) |
+| `DNS_PROBE_FINISHED_NO_INTERNET` | Domain exists, but the **DNS server is unreachable** (down/network issue) |
+| `DNS_PROBE_FINISHED_BAD_CONFIG` | **DNS server unreachable** due to bad config or downtime |
+
+## 6. Flushing DNS Cache
+- **Windows:** `ipconfig /flushdns`
+- **macOS:** `dscacheutil -flushcache`
+- Useful when stale cached records cause outdated/incorrect resolution.
+
+## 🔑 Quick-Fire Interview Answers
+- **What is DNS?** A system that translates human-readable domain names into IP addresses.
+- **Order of DNS lookup?** Local cache → Recursive resolver → Root server → TLD server → Authoritative server.
+- **What does a root DNS server know?** Which TLD servers handle which extensions (.com, .org, etc.) — not the actual website IPs.
+- **What does an authoritative server do?** Holds and returns the actual DNS records (e.g., the A record) for a domain.
+- **What is an A record?** A DNS record mapping a domain name to an IPv4 address.
+- **What is DNSSEC?** A security extension that verifies DNS data authenticity and integrity, preventing tampering.
+- **How to debug DNS?** Use `dig` (`+short`, `+trace`, record type queries) to inspect resolution and propagation.
+
 
 
 # REST API ( Representational State Transfer Application )
