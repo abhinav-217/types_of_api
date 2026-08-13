@@ -1,3 +1,79 @@
+# HTTP — Compact Revision Notes
+
+## 1. What is HTTP?
+- **HTTP (Hypertext Transfer Protocol)** = foundation of the World Wide Web; used to load webpages via hyperlinks.
+- It's an **application layer protocol** — sits on top of other layers of the network stack (e.g., TCP/IP).
+- Basic flow: **Client sends a request → Server sends a response.**
+
+## 2. HTTP Request — Structure
+A typical HTTP request contains:
+- **HTTP version type**
+- **URL**
+- **HTTP method** (verb)
+- **HTTP request headers**
+- **Optional HTTP body**
+
+### HTTP Methods (Verbs)
+- Indicate the **action** the request wants the server to perform.
+- **GET** → asks for information back (e.g., load a webpage).
+- **POST** → submits information to the server (e.g., form data — username/password).
+
+### Request Headers
+- **Key-value pairs** of text info sent with every request (and response).
+- Communicate metadata: browser/client type, what data is being requested, etc.
+
+### Request Body
+- Contains the actual **data being submitted** to the server (e.g., form inputs, login credentials).
+- Optional — not all requests have one (e.g., typical GET requests don't).
+
+## 3. HTTP Response — Structure
+A typical HTTP response contains:
+- **HTTP status code**
+- **HTTP response headers**
+- **Optional HTTP body**
+
+### Status Codes (3-digit)
+Grouped into 5 classes:
+| Range | Meaning |
+|---|---|
+| **1xx** | Informational |
+| **2xx** | Success |
+| **3xx** | Redirection |
+| **4xx** | Client Error |
+| **5xx** | Server Error |
+
+- `200 OK` → request succeeded (most common success code).
+- `404 NOT FOUND` → common client error (e.g., typo in URL).
+- `4xx` → problem caused by the **client**.
+- `5xx` → problem caused by the **server**.
+
+### Response Headers
+- Key-value metadata about the response — e.g., **language** and **format** of the returned data.
+
+### Response Body
+- For successful `GET` requests, usually contains the **requested content** (commonly **HTML**, which the browser renders into a webpage).
+
+## 4. HTTP & Statelessness
+- HTTP is a **stateless** protocol — each request/command is independent of others; the server doesn't inherently remember previous requests.
+- **Original HTTP**: each request opened and closed its **own TCP connection**.
+- **HTTP 1.1+**: supports **persistent connections** — multiple requests can be sent over a single, reused TCP connection → better resource efficiency.
+
+## 5. HTTP & DDoS Attacks
+- Because HTTP requests are cheap to generate, **large volumes of HTTP requests** can be used to overwhelm a target — this is called an **HTTP flood attack**.
+- These fall under **Application Layer (Layer 7) attacks** in DDoS terminology (as opposed to lower-layer network/transport attacks).
+
+## 🔑 Quick-Fire Interview Answers
+- **What is HTTP?** An application-layer protocol used to transfer data (webpages) between client and server via requests and responses.
+- **GET vs POST?** GET retrieves data; POST submits data to the server.
+- **What's in a request?** Version, URL, method, headers, optional body.
+- **What's in a response?** Status code, headers, optional body.
+- **2xx vs 4xx vs 5xx?** 2xx = success, 4xx = client-side error, 5xx = server-side error.
+- **Is HTTP stateful?** No — it's stateless; each request is independent (persistent connections in HTTP 1.1+ just reuse the TCP connection, they don't add state).
+- **How does HTTP relate to DDoS?** High volumes of HTTP requests can flood a server — known as an HTTP flood, a Layer 7 (application layer) DDoS attack.
+
+
+
+
 # REST API ( Representational State Transfer Application )
 ## What is a REST API?
 - Enables client-server communication over HTTP.
